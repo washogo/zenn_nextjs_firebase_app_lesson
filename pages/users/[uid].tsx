@@ -45,7 +45,7 @@ export default function UserShow() {
       setUser(gotUser);
     }
     loadUser();
-  }, []);
+  }, [query.uid]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

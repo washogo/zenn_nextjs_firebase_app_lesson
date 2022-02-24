@@ -38,6 +38,7 @@ export default function QuestionsShow() {
     };
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function loadData() {
     if (routerQuery.id === undefined) {
       return;
@@ -80,7 +81,7 @@ export default function QuestionsShow() {
     }
   
     loadData()
-  }, [routerQuery, user])
+  }, [loadData, routerQuery, user])
 
   const [isSending, setIsSending] = useState(false);
   const [body, setBody] = useState("");

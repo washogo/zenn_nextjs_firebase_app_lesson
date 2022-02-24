@@ -40,6 +40,7 @@ export default function QuestionsReceived() {
     setQuestions(questions.concat(gotQuestions));
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function loadQuestions() {
     const snapshot = await getDocs(createBaseQuery());
 
@@ -78,11 +79,12 @@ export default function QuestionsReceived() {
     }
 
     loadQuestions();
-  }, [process.browser, user]);
+  }, [loadQuestions, user]);
 
   const [isPaginationFinished, setIsPaginationFinished] = useState(false);
   const scrollContainerRef = useRef(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function onScroll() {
     if (isPaginationFinished) {
       return;
@@ -106,7 +108,7 @@ export default function QuestionsReceived() {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [questions, scrollContainerRef.current, isPaginationFinished]);
+  }, [questions, isPaginationFinished, onScroll]);
 
   
 

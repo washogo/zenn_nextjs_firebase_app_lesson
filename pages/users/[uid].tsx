@@ -18,8 +18,8 @@ type Query = {
 };
 
 export default function UserShow() {
-  const { user: currentUser } = useAuthentication();
   const [user, setUser] = useState<User>(null);
+  const { user: currentUser } = useAuthentication();
   const router = useRouter();
   const query = router.query as Query;
 
@@ -45,7 +45,7 @@ export default function UserShow() {
       setUser(gotUser);
     }
     loadUser();
-  }, [query.uid]);
+  }, []);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -74,8 +74,8 @@ export default function UserShow() {
       progress: undefined,
     });
   }
-  console.log(user)
-  console.log(currentUser)
+  console.log(user);
+  console.log(currentUser);
 
   return (
     <Layout>
@@ -89,7 +89,7 @@ export default function UserShow() {
       </div>
       <div className="row justify-content-center mb-3">
         <div className="col-12 col-md-6">
-          {user ? (
+          {user.uid === currentUser.uid ? (
             <div>自分には送信できません。</div>
           ) : (
             <form onSubmit={onSubmit}>

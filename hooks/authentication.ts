@@ -62,7 +62,7 @@ export const useAuthentication = () => {
         setUser(null);
       }
     });
-  }, [setUser, user]);
+  }, []);
 
   return { user };
 };

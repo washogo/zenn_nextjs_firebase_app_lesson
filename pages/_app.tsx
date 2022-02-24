@@ -1,11 +1,11 @@
 import "../lib/firebase";
-import "../lib/firebase";
+import "../hooks/authentication";
 import "../styles/globals.scss";
 import { RecoilRoot } from "recoil";
-import dayjs from 'dayjs'
-import 'dayjs/locale/ja'
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
 
-dayjs.locale('ja')
+dayjs.locale("ja");
 
 function MyApp({ Component, pageProps }) {
   return (

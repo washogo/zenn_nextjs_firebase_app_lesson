@@ -110,8 +110,6 @@ export default function QuestionsReceived() {
     };
   }, [questions, isPaginationFinished, onScroll]);
 
-  
-
   return (
     <Layout>
       <h1 className="h4">受け取った質問一覧</h1>

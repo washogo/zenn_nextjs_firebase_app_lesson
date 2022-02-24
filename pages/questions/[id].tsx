@@ -77,11 +77,11 @@ export default function QuestionsShow() {
 
   useEffect(() => {
     if (user === null) {
-      return
+      return;
     }
-  
-    loadData()
-  }, [loadData, routerQuery, user])
+
+    loadData();
+  }, [loadData, routerQuery, user]);
 
   const [isSending, setIsSending] = useState(false);
   const [body, setBody] = useState("");

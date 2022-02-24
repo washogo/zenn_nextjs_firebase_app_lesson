@@ -89,7 +89,7 @@ export default function UserShow() {
       </div>
       <div className="row justify-content-center mb-3">
         <div className="col-12 col-md-6">
-          {user.uid === currentUser.uid ? (
+          {user ? (
             <div>自分には送信できません。</div>
           ) : (
             <form onSubmit={onSubmit}>

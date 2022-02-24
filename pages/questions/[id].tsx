@@ -28,6 +28,8 @@ export default function QuestionsShow() {
   const { user } = useAuthentication();
   const [question, setQuestion] = useState<Question>(null);
   const [answer, setAnswer] = useState<Answer>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [body, setBody] = useState("");
 
   function getCollections() {
     const db = getFirestore();
@@ -38,14 +40,12 @@ export default function QuestionsShow() {
     };
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function loadData() {
     if (routerQuery.id === undefined) {
       return;
     }
 
     const { questionsCollection, answersCollection } = getCollections();
-
     const questionDoc = await getDoc(doc(questionsCollection, routerQuery.id));
     if (!questionDoc.exists()) {
       return;
@@ -81,10 +81,7 @@ export default function QuestionsShow() {
     }
 
     loadData();
-  }, [loadData, routerQuery, user]);
-
-  const [isSending, setIsSending] = useState(false);
-  const [body, setBody] = useState("");
+  }, [query, user]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -117,47 +114,49 @@ export default function QuestionsShow() {
 
   return (
     <Layout>
-      <div className="col-12 col-md-6">
-        {question && (
-          <>
-            <div className="card">
-              <div className="card-body">{question.body}</div>
-            </div>
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-6">
+          {question && (
+            <>
+              <div className="card">
+                <div className="card-body">{question.body}</div>
+              </div>
 
-            <section className="text-center mt-4">
-              <h2 className="h4">回答</h2>
+              <section className="text-center mt-4">
+                <h2 className="h4">回答</h2>
 
-              {answer === null ? (
-                <form onSubmit={onSubmit}>
-                  <textarea
-                    className="form-control"
-                    placeholder="おげんきですか？"
-                    rows={6}
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    required
-                  ></textarea>
-                  <div className="m-3">
-                    {isSending ? (
-                      <div
-                        className="spinner-border text-secondary"
-                        role="status"
-                      ></div>
-                    ) : (
-                      <button type="submit" className="btn btn-primary">
-                        回答する
-                      </button>
-                    )}
+                {answer === null ? (
+                  <form onSubmit={onSubmit}>
+                    <textarea
+                      className="form-control"
+                      placeholder="おげんきですか？"
+                      rows={6}
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                      required
+                    ></textarea>
+                    <div className="m-3">
+                      {isSending ? (
+                        <div
+                          className="spinner-border text-secondary"
+                          role="status"
+                        ></div>
+                      ) : (
+                        <button type="submit" className="btn btn-primary">
+                          回答する
+                        </button>
+                      )}
+                    </div>
+                  </form>
+                ) : (
+                  <div className="card">
+                    <div className="card-body text-left">{answer.body}</div>
                   </div>
-                </form>
-              ) : (
-                <div className="card">
-                  <div className="card-body text-left">{answer.body}</div>
-                </div>
-              )}
-            </section>
-          </>
-        )}
+                )}
+              </section>
+            </>
+          )}
+        </div>
       </div>
     </Layout>
   );

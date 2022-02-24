@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useState } from "react";
 import { User } from "../../models/User";
-import Layout from "../../components/Layout";
-import { useAuthentication } from "../../hooks/authentication";
+import { FormEvent, useEffect, useState } from "react";
 import {
   addDoc,
   collection,
@@ -11,7 +9,9 @@ import {
   getFirestore,
   serverTimestamp,
 } from "firebase/firestore";
-import { toast } from "react-toastify";
+import Layout from "../../components/Layout";
+import { useAuthentication } from "../../hooks/authentication";
+import { toast } from 'react-toastify';
 
 type Query = {
   uid: string;
@@ -19,10 +19,10 @@ type Query = {
 
 export default function UserShow() {
   const [user, setUser] = useState<User>(null);
-  const { user: currentUser } = useAuthentication();
   const router = useRouter();
   const query = router.query as Query;
 
+  const { user: currentUser } = useAuthentication();
   const [body, setBody] = useState("");
 
   const [isSending, setIsSending] = useState(false);
@@ -63,57 +63,51 @@ export default function UserShow() {
     });
 
     setIsSending(false);
+
     setBody("");
-    toast.success("質問を送信しました。", {
-      position: "bottom-left",
+    
+    toast.success('質問を送信しました。', {
+      position: 'bottom-left',
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-    });
+    })
   }
-  console.log(user);
-  console.log(currentUser);
 
   return (
     <Layout>
-      <div className="container">
-        {user && currentUser && (
-          <div className="text-center">
-            <h1 className="h4">{user.name}さんのページ</h1>
-            <div className="m-5">{user.name}さんに質問しよう！</div>
-          </div>
-        )}
-      </div>
+      {user && (
+        <div className="text-center">
+          <h1 className="h4">{user.name}さんのページ</h1>
+          <div className="m-5">{user.name}さんに質問しよう！</div>
+        </div>
+      )}
       <div className="row justify-content-center mb-3">
         <div className="col-12 col-md-6">
-          {user ? (
-            <div>自分には送信できません。</div>
-          ) : (
-            <form onSubmit={onSubmit}>
-              <textarea
-                className="form-control"
-                placeholder="おげんきですか？"
-                rows={6}
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                required
-              ></textarea>
-              <div className="m-3">
-                {isSending ? (
-                  <div className="spinner-border text-secondary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                ) : (
-                  <button type="submit" className="btn btn-primary">
-                    質問を送信する
-                  </button>
-                )}
-              </div>
-            </form>
-          )}
+          <form onSubmit={onSubmit}>
+            <textarea
+              className="form-control"
+              placeholder="おげんきですか？"
+              rows={6}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              required
+            ></textarea>
+            <div className="m-3">
+              {isSending ? (
+                <div className="spinner-border text-secondary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <button type="submit" className="btn btn-primary">
+                  質問を送信する
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </Layout>

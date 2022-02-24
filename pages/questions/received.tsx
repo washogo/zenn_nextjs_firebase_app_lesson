@@ -1,6 +1,6 @@
 import { Question } from "../../models/Question";
 import Layout from "../../components/Layout";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   collection,
   DocumentData,
@@ -19,7 +19,11 @@ import Link from "next/link";
 
 export default function QuestionsReceived() {
   const [questions, setQuestions] = useState<Question[]>([]);
+
   const { user } = useAuthentication();
+
+  const [isPaginationFinished, setIsPaginationFinished] = useState(false);
+  const scrollContainerRef = useRef(null);
 
   function createBaseQuery() {
     const db = getFirestore();
@@ -40,7 +44,6 @@ export default function QuestionsReceived() {
     setQuestions(questions.concat(gotQuestions));
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function loadQuestions() {
     const snapshot = await getDocs(createBaseQuery());
 
@@ -63,7 +66,6 @@ export default function QuestionsReceived() {
     );
 
     if (snapshot.empty) {
-      setIsPaginationFinished(true);
       return;
     }
 
@@ -79,12 +81,8 @@ export default function QuestionsReceived() {
     }
 
     loadQuestions();
-  }, [loadQuestions, user]);
+  }, [process.browser, user]);
 
-  const [isPaginationFinished, setIsPaginationFinished] = useState(false);
-  const scrollContainerRef = useRef(null);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   function onScroll() {
     if (isPaginationFinished) {
       return;
@@ -108,7 +106,7 @@ export default function QuestionsReceived() {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [questions, isPaginationFinished, onScroll]);
+  }, [questions, scrollContainerRef.current, isPaginationFinished]);
 
   return (
     <Layout>
@@ -122,13 +120,13 @@ export default function QuestionsReceived() {
                 <div className="card my-3">
                   <div className="card-body">
                     <div className="text-truncate">{question.body}</div>
-                    <div className="text-muted text-end">
-                      <small>
-                        {dayjs(question.createdAt.toDate()).format(
-                          "YYYY/MM/DD HH:mm"
-                        )}
-                      </small>
-                    </div>
+                  </div>
+                  <div className="text-muted text-end">
+                    <small>
+                      {dayjs(question.createdAt.toDate()).format(
+                        "YYYY/MM/DD HH:mm"
+                      )}
+                    </small>
                   </div>
                 </div>
               </a>

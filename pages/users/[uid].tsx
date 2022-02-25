@@ -31,7 +31,7 @@ export default function UserShow() {
     if (query.uid === undefined) {
       return;
     }
-    const loadUser = async () => {
+    const loadUser = async (query: Query) => {
       const db = getFirestore();
       const ref = doc(collection(db, "users"), query.uid);
       const userDoc = await getDoc(ref);
@@ -44,8 +44,8 @@ export default function UserShow() {
       gotUser.uid = userDoc.id;
       setUser(gotUser);
     }
-    loadUser();
-  }, [query.uid]);
+    loadUser(query);
+  }, [query]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

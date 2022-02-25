@@ -26,12 +26,14 @@ export default function UserShow() {
   const [body, setBody] = useState("");
 
   const [isSending, setIsSending] = useState(false);
+  const [isOver, setIsOver] = useState(false);
 
   useEffect(() => {
     if (query.uid === undefined) {
       return;
     }
-    const loadUser = async (query: Query) => {
+
+    const loadUser = async () => {
       const db = getFirestore();
       const ref = doc(collection(db, "users"), query.uid);
       const userDoc = await getDoc(ref);
@@ -43,9 +45,10 @@ export default function UserShow() {
       const gotUser = userDoc.data() as User;
       gotUser.uid = userDoc.id;
       setUser(gotUser);
-    }
-    loadUser(query);
-  }, [query]);
+    };
+
+    loadUser();
+  }, [query, router]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -80,40 +83,45 @@ export default function UserShow() {
   return (
     <Layout>
       {user && currentUser && (
-        <div className="text-center">
-          <h1 className="h4">{user.name}さんのページ</h1>
-          <div className="m-5">{user.name}さんに質問しよう！</div>
-        </div>
-      )}
-      <div className="row justify-content-center mb-3">
-        <div className="col-12 col-md-6">
-          {user.uid === currentUser.uid ? (
-            <div>自分には送信できません。</div>
-          ) : (
-            <form onSubmit={onSubmit}>
-              <textarea
-                className="form-control"
-                placeholder="おげんきですか？"
-                rows={6}
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                required
-              ></textarea>
-              <div className="m-3">
-                {isSending ? (
-                  <div className="spinner-border text-secondary" role="status">
-                    <span className="visually-hidden">Loading...</span>
+        <>
+          <div className="text-center">
+            <h1 className="h4">{user.name}さんのページ</h1>
+            <div className="m-5">{user.name}さんに質問しよう！</div>
+          </div>
+          <div className="row justify-content-center mb-3">
+            <div className="col-12 col-md-6">
+              {user.uid === currentUser.uid ? (
+                <div>自分には送信できません。</div>
+              ) : (
+                <form onSubmit={onSubmit}>
+                  <textarea
+                    className="form-control"
+                    placeholder="おげんきですか？"
+                    rows={6}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    required
+                  ></textarea>
+                  <div className="m-3">
+                    {isSending ? (
+                      <div
+                        className="spinner-border text-secondary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    ) : (
+                      <button type="submit" className="btn btn-primary">
+                        質問を送信する
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <button type="submit" className="btn btn-primary">
-                    質問を送信する
-                  </button>
-                )}
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </Layout>
   );
 }

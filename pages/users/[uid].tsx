@@ -31,7 +31,7 @@ export default function UserShow() {
     if (query.uid === undefined) {
       return;
     }
-    async function loadUser() {
+    const loadUser = async () => {
       const db = getFirestore();
       const ref = doc(collection(db, "users"), query.uid);
       const userDoc = await getDoc(ref);

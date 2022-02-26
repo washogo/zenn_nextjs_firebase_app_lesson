@@ -1,3 +1,14 @@
+# 概要
+Next.jsとFirebaseで質問箱のようなサービスを作る
+https://zenn.dev/dala/books/nextjs-firebase-service
+
+# 課題
+- firebase admin sdk は何を実現したい時に、どのように行うのがベストか
+- firebase admin sdk　を導入する際に複数方法があるが、重要なのはデプロイ環境である
+- 秘密鍵の扱いが分からない
+- node-canvasが正常に動作しない
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
